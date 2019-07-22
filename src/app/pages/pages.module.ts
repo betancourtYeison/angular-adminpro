@@ -10,6 +10,7 @@ import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ProgressComponent } from "./progress/progress.component";
 import { Graphics1Component } from "./graphics1/graphics1.component";
+import { AccountSettingsComponent } from "./account-settings/account-settings.component";
 
 import { IncreaserComponent } from "../components/increaser/increaser.component";
 import { GraphicDoughnutComponent } from "../components/graphic-doughnut/graphic-doughnut.component";
@@ -20,6 +21,7 @@ import { GraphicDoughnutComponent } from "../components/graphic-doughnut/graphic
     DashboardComponent,
     ProgressComponent,
     Graphics1Component,
+    AccountSettingsComponent,
     IncreaserComponent,
     GraphicDoughnutComponent
   ],
