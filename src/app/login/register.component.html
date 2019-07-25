@@ -9,6 +9,9 @@
   <div class="login-box card">
     <div class="card-body">
       <form
+        ngNativeValidate
+        [formGroup]="formRegister"
+        (ngSubmit)="register()"
         class="form-horizontal form-material"
         id="loginform"
         action="index.html"
@@ -23,9 +26,11 @@
         <div class="form-group m-t-20">
           <div class="col-xs-12">
             <input
+              formControlName="name"
+              name="name"
               class="form-control"
               type="text"
-              required=""
+              required
               placeholder="Name"
             />
           </div>
@@ -33,9 +38,11 @@
         <div class="form-group ">
           <div class="col-xs-12">
             <input
+              formControlName="email"
+              name="email"
               class="form-control"
-              type="text"
-              required=""
+              type="email"
+              required
               placeholder="Email"
             />
           </div>
@@ -43,9 +50,11 @@
         <div class="form-group ">
           <div class="col-xs-12">
             <input
+              formControlName="password"
+              name="password"
               class="form-control"
               type="password"
-              required=""
+              required
               placeholder="Password"
             />
           </div>
@@ -53,17 +62,32 @@
         <div class="form-group">
           <div class="col-xs-12">
             <input
+              formControlName="password2"
+              name="password2"
               class="form-control"
               type="password"
-              required=""
+              required
               placeholder="Confirm Password"
             />
           </div>
         </div>
+        <div
+          class="form-group"
+          *ngIf="formRegister.errors?.fieldsMatch && !formRegister.pristine"
+        >
+          <p class="text-danger">
+            Your password and confirmation password do not match.
+          </p>
+        </div>
         <div class="form-group row">
           <div class="col-md-12">
             <div class="checkbox checkbox-primary p-t-0">
-              <input id="checkbox-signup" type="checkbox" />
+              <input
+                formControlName="terms"
+                name="terms"
+                id="checkbox-signup"
+                type="checkbox"
+              />
               <label for="checkbox-signup">
                 I agree to all <a href="#">Terms</a></label
               >
