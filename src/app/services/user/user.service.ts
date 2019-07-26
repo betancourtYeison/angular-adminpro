@@ -102,7 +102,7 @@ export class UserService {
   }
 
   updateUser(user: User) {
-    let url = `${URL_SERVICES}/user/${this.user._id}?token=${this.token}`;
+    let url = `${URL_SERVICES}/user/${user._id}?token=${this.token}`;
     let headers = new HttpHeaders({
       "Content-Type": "application/json"
     });
@@ -113,8 +113,10 @@ export class UserService {
           text: user.email,
           type: "success"
         });
-        let userResponse = response.user;
-        this.saveStorage(userResponse.id, this.token, userResponse);
+        if (user._id === this.user._id) {
+          let userResponse: User = response.user;
+          this.saveStorage(userResponse._id, this.token, userResponse);
+        }
         return response.user;
       })
     );
@@ -134,5 +136,37 @@ export class UserService {
         this.saveStorage(id, this.token, this.user);
       })
       .catch(err => console.log(err));
+  }
+
+  loadUsers(from: number = 0) {
+    let url = `${URL_SERVICES}/user?from=${from}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http.get(url, { headers });
+  }
+
+  searchUser(search: string) {
+    let url = `${URL_SERVICES}/search/collection/users/${search}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http
+      .get(url, { headers })
+      .pipe(map((response: any) => response.users));
+  }
+
+  deleteUser(id: string) {
+    let url = `${URL_SERVICES}/user/${id}?token=${this.token}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+
+    return this._http.delete(url, { headers }).pipe(
+      map((response: any) => {
+        Swal.fire("Deleted!", "User has been deleted.", "success");
+        return response.user;
+      })
+    );
   }
 }

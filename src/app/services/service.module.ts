@@ -8,6 +8,7 @@ import {
   SidebarService,
   UserService,
   UploadService,
+  ModalUploadService,
   LoginGuard
 } from "./service.index";
 
@@ -20,6 +21,7 @@ import {
     SidebarService,
     UserService,
     UploadService,
+    ModalUploadService,
     LoginGuard
   ]
 })
