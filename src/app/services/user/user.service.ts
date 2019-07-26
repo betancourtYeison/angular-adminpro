@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
 import { Router } from "@angular/router";
+import { UploadService } from "../upload/upload.service";
 import Swal from "sweetalert2";
 
 @Injectable({
@@ -13,7 +14,11 @@ export class UserService {
   user: User;
   token: string;
 
-  constructor(public _http: HttpClient, public router: Router) {
+  constructor(
+    public _http: HttpClient,
+    public router: Router,
+    public _uploadService: UploadService
+  ) {
     this.loadStorage();
   }
 
@@ -26,13 +31,13 @@ export class UserService {
     this.token = localStorage.getItem("token");
   }
 
-  saveStorage(response) {
-    localStorage.setItem("id", response.id);
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify(response.user));
+  saveStorage(id: string, token: string, user: User) {
+    localStorage.setItem("id", id);
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
 
-    this.user = response.user;
-    this.token = response.token;
+    this.user = user;
+    this.token = token;
   }
 
   logout() {
@@ -53,7 +58,7 @@ export class UserService {
 
     return this._http.post(url, { token }, { headers }).pipe(
       map((response: any) => {
-        this.saveStorage(response);
+        this.saveStorage(response.id, response.token, response.user);
         return response.user;
       })
     );
@@ -72,7 +77,7 @@ export class UserService {
         } else {
           localStorage.removeItem("email");
         }
-        this.saveStorage(response);
+        this.saveStorage(response.id, response.token, response.user);
         return response.user;
       })
     );
@@ -94,5 +99,40 @@ export class UserService {
         return response.user;
       })
     );
+  }
+
+  updateUser(user: User) {
+    let url = `${URL_SERVICES}/user/${this.user._id}?token=${this.token}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http.put(url, user, { headers }).pipe(
+      map((response: any) => {
+        Swal.fire({
+          title: "User updated",
+          text: user.email,
+          type: "success"
+        });
+        let userResponse = response.user;
+        this.saveStorage(userResponse.id, this.token, userResponse);
+        return response.user;
+      })
+    );
+  }
+
+  changeImage(file: File, id: string) {
+    this._uploadService
+      .upload(file, "users", id)
+      .then((response: any) => {
+        Swal.fire({
+          title: "Image updated",
+          text: this.user.email,
+          type: "success"
+        });
+
+        this.user.img = response.users.img;
+        this.saveStorage(id, this.token, this.user);
+      })
+      .catch(err => console.log(err));
   }
 }

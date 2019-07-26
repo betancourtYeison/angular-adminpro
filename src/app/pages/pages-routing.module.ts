@@ -8,6 +8,7 @@ import { Graphics1Component } from "./graphics1/graphics1.component";
 import { PromisesComponent } from "./promises/promises.component";
 import { RxjsComponent } from "./rxjs/rxjs.component";
 import { AccountSettingsComponent } from "./account-settings/account-settings.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 import { LoginGuard } from "../services/guards/login.guard";
 
@@ -42,6 +43,11 @@ const pagesRoutes: Routes = [
         path: "account-settings",
         component: AccountSettingsComponent,
         data: { title: "Account Settings" }
+      },
+      {
+        path: "profile",
+        component: ProfileComponent,
+        data: { title: "Profile" }
       },
       { path: "", redirectTo: "/dashboard", pathMatch: "full" }
     ]

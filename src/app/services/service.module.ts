@@ -7,6 +7,7 @@ import {
   SharedService,
   SidebarService,
   UserService,
+  UploadService,
   LoginGuard
 } from "./service.index";
 
@@ -18,6 +19,7 @@ import {
     SharedService,
     SidebarService,
     UserService,
+    UploadService,
     LoginGuard
   ]
 })
