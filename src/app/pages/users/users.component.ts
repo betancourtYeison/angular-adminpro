@@ -24,7 +24,14 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.loadUsers();
-    this._modalUpdloadServe.notification.subscribe(() => this.loadUsers());
+    this._modalUpdloadServe.notification.subscribe((response: any) => {
+      this.users.map((user: User) => {
+        if (user._id === response.users._id) {
+          user.img = response.users.img;
+        }
+        return user;
+      });
+    });
   }
 
   loadUsers() {
@@ -55,14 +62,11 @@ export class UsersComponent implements OnInit {
 
     this.loading = true;
     this._userService.searchUser(search).subscribe((users: User[]) => {
+      this.usersTotal = users.length;
       this.users = users;
       this.from = 0;
       this.loading = false;
     });
-  }
-
-  showModal(id: string) {
-    this._modalUpdloadServe.showModal("users", id);
   }
 
   updateUser(user: User) {
@@ -94,5 +98,9 @@ export class UsersComponent implements OnInit {
         });
       }
     });
+  }
+
+  showModal(id: string) {
+    this._modalUpdloadServe.showModal("users", id);
   }
 }

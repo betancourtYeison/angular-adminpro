@@ -7,6 +7,8 @@ import {
   SharedService,
   SidebarService,
   UserService,
+  HospitalService,
+  DoctorService,
   UploadService,
   ModalUploadService,
   LoginGuard
@@ -20,6 +22,8 @@ import {
     SharedService,
     SidebarService,
     UserService,
+    HospitalService,
+    DoctorService,
     UploadService,
     ModalUploadService,
     LoginGuard

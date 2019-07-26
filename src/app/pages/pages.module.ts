@@ -13,6 +13,8 @@ import { IncreaserComponent } from "../components/increaser/increaser.component"
 import { GraphicDoughnutComponent } from "../components/graphic-doughnut/graphic-doughnut.component";
 import { ModalUploadComponent } from "../components/modal-upload/modal-upload.component";
 
+import { LoaderComponent } from "../shared/loader/loader.component";
+
 import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ProgressComponent } from "./progress/progress.component";
@@ -22,12 +24,16 @@ import { RxjsComponent } from "./rxjs/rxjs.component";
 import { AccountSettingsComponent } from "./account-settings/account-settings.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { UsersComponent } from "./users/users.component";
+import { HospitalsComponent } from "./hospitals/hospitals.component";
+import { DoctorsComponent } from './doctors/doctors.component';
+import { DoctorComponent } from './doctors/doctor.component';
 
 @NgModule({
   declarations: [
     IncreaserComponent,
     GraphicDoughnutComponent,
     ModalUploadComponent,
+    LoaderComponent,
     PagesComponent,
     DashboardComponent,
     ProgressComponent,
@@ -36,7 +42,10 @@ import { UsersComponent } from "./users/users.component";
     RxjsComponent,
     AccountSettingsComponent,
     ProfileComponent,
-    UsersComponent
+    UsersComponent,
+    HospitalsComponent,
+    DoctorsComponent,
+    DoctorComponent
   ],
   exports: [
     PagesComponent,

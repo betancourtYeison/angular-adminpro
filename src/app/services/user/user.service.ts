@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { User } from "src/app/models/user.model";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
-import { Router } from "@angular/router";
+import { User } from "../../models/user.model";
 import { UploadService } from "../upload/upload.service";
 import Swal from "sweetalert2";
 
@@ -83,6 +83,32 @@ export class UserService {
     );
   }
 
+  searchUser(search: string) {
+    let url = `${URL_SERVICES}/search/collection/users/${search}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http
+      .get(url, { headers })
+      .pipe(map((response: any) => response.users));
+  }
+
+  loadUser(id: string) {
+    let url = `${URL_SERVICES}/user/${id}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http.get(url, { headers });
+  }
+
+  loadUsers(from: number = 0) {
+    let url = `${URL_SERVICES}/user?from=${from}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http.get(url, { headers });
+  }
+
   createUser(user: User) {
     let url = `${URL_SERVICES}/user`;
     let headers = new HttpHeaders({
@@ -122,6 +148,20 @@ export class UserService {
     );
   }
 
+  deleteUser(id: string) {
+    let url = `${URL_SERVICES}/user/${id}?token=${this.token}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+
+    return this._http.delete(url, { headers }).pipe(
+      map((response: any) => {
+        Swal.fire("Deleted!", "User has been deleted.", "success");
+        return response.user;
+      })
+    );
+  }
+
   changeImage(file: File, id: string) {
     this._uploadService
       .upload(file, "users", id)
@@ -136,37 +176,5 @@ export class UserService {
         this.saveStorage(id, this.token, this.user);
       })
       .catch(err => console.log(err));
-  }
-
-  loadUsers(from: number = 0) {
-    let url = `${URL_SERVICES}/user?from=${from}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers });
-  }
-
-  searchUser(search: string) {
-    let url = `${URL_SERVICES}/search/collection/users/${search}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http
-      .get(url, { headers })
-      .pipe(map((response: any) => response.users));
-  }
-
-  deleteUser(id: string) {
-    let url = `${URL_SERVICES}/user/${id}?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.delete(url, { headers }).pipe(
-      map((response: any) => {
-        Swal.fire("Deleted!", "User has been deleted.", "success");
-        return response.user;
-      })
-    );
   }
 }

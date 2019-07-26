@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
+import { LoginGuard } from "../services/service.index";
+
 import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ProgressComponent } from "./progress/progress.component";
@@ -9,9 +11,10 @@ import { PromisesComponent } from "./promises/promises.component";
 import { RxjsComponent } from "./rxjs/rxjs.component";
 import { AccountSettingsComponent } from "./account-settings/account-settings.component";
 import { ProfileComponent } from "./profile/profile.component";
-
-import { LoginGuard } from "../services/service.index";
 import { UsersComponent } from "./users/users.component";
+import { HospitalsComponent } from "./hospitals/hospitals.component";
+import { DoctorsComponent } from "./doctors/doctors.component";
+import { DoctorComponent } from "./doctors/doctor.component";
 
 const pagesRoutes: Routes = [
   {
@@ -55,7 +58,22 @@ const pagesRoutes: Routes = [
       {
         path: "users",
         component: UsersComponent,
-        data: { title: "Users" }
+        data: { title: "Maintenance Users" }
+      },
+      {
+        path: "hospitals",
+        component: HospitalsComponent,
+        data: { title: "Maintenance Hospitals" }
+      },
+      {
+        path: "doctors",
+        component: DoctorsComponent,
+        data: { title: "Maintenance Doctors" }
+      },
+      {
+        path: "doctor/:id",
+        component: DoctorComponent,
+        data: { title: "Doctor" }
       },
       { path: "", redirectTo: "/dashboard", pathMatch: "full" }
     ]

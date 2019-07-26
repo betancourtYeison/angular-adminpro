@@ -11,10 +11,11 @@
           (ngSubmit)="save(formProfile.value)"
         >
           <div class="form-group">
-            <label for="exampleInputuname">Name</label>
+            <label for="exampleInputName">Name</label>
             <div class="input-group">
               <div class="input-group-addon"><i class="ti-user"></i></div>
               <input
+                id="exampleInputName"
                 [ngModel]="user.name"
                 name="name"
                 type="text"
@@ -25,10 +26,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail1">Email</label>
+            <label for="exampleInputEmail">Email</label>
             <div class="input-group">
               <div class="input-group-addon"><i class="ti-email"></i></div>
               <input
+                id="exampleInputEmail"
                 [ngModel]="user.email"
                 [disabled]="user.google"
                 name="email"

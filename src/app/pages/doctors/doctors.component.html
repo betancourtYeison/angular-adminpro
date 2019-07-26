@@ -4,10 +4,10 @@
       <div class="card-body">
         <input
           #input
-          (keyup)="searchUser(input.value)"
+          (keyup)="searchDoctor(input.value)"
           type="text"
           class="form-control"
-          placeholder="Search user...."
+          placeholder="Search doctor...."
         />
       </div>
     </div>
@@ -18,62 +18,58 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">
-          Users registered (<small>{{ usersTotal }}</small
-          >)
-        </h3>
+        <div class="row">
+          <div class="col-9">
+            <h3 class="card-title">
+              Doctors registered (<small>{{ doctorsTotal }}</small
+              >)
+            </h3>
+          </div>
+          <div class="col-3 text-right">
+            <button
+              class="btn waves-effect waves-light btn-rounded btn-primary"
+              [routerLink]="['/doctor', 'new']"
+            >
+              <i class="fa fa-plus"></i>
+              Create doctor
+            </button>
+          </div>
+        </div>
         <table class="table table-hover">
           <thead>
             <tr>
               <th>Image</th>
-              <th>Email</th>
               <th>Name</th>
-              <th>Role</th>
-              <th>Auth</th>
+              <th>Hospital</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let doctor of doctors">
               <td class="w70">
                 <img
-                  (click)="showModal(user._id)"
-                  [src]="user.img | image"
+                  (click)="showModal(doctor._id)"
+                  [src]="doctor.img | image: 'doctors'"
                   class="img-50 img-circle pointer"
                 />
               </td>
-              <td>{{ user.email }}</td>
               <td>
                 <input
-                  [(ngModel)]="user.name"
+                  [(ngModel)]="doctor.name"
                   name="name"
                   type="test"
                   class="form-control"
                 />
               </td>
-              <td>
-                <select
-                  [(ngModel)]="user.role"
-                  name="role"
-                  class="form-control"
-                >
-                  <option value="ADMIN_ROLE">ADMIN_ROLE</option>
-                  <option value="USER_ROLE">USER_ROLE</option>
-                </select>
-              </td>
-              <td>
-                <label *ngIf="user.google" class="label label-danger"
-                  >Google</label
-                >
-                <label *ngIf="!user.google" class="label label-primary"
-                  >Normal</label
-                >
-              </td>
+              <td>{{ doctor.hospital.name }}</td>
               <td class="w120">
-                <button class="btn btn-primary" (click)="updateUser(user)">
-                  <i class="fa fa-save"></i>
+                <button
+                  class="btn btn-primary"
+                  [routerLink]="['/doctor', doctor._id]"
+                >
+                  <i class="fa fa-pencil"></i>
                 </button>
-                <button class="btn btn-danger" (click)="deleteUser(user)">
+                <button class="btn btn-danger" (click)="deleteDoctor(doctor)">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </td>
