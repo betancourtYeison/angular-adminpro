@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { map } from "rxjs/operators";
+import { throwError } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
 import { User } from "../../models/user.model";
 import { UploadService } from "../upload/upload.service";
@@ -13,6 +14,7 @@ import Swal from "sweetalert2";
 export class UserService {
   user: User;
   token: string;
+  menu: any = [];
 
   constructor(
     public _http: HttpClient,
@@ -27,25 +29,31 @@ export class UserService {
   }
 
   loadStorage() {
+    this.menu = JSON.parse(localStorage.getItem("menu"));
     this.user = JSON.parse(localStorage.getItem("user"));
     this.token = localStorage.getItem("token");
   }
 
-  saveStorage(id: string, token: string, user: User) {
+  saveStorage(id: string, token: string, user: User, menu: any) {
     localStorage.setItem("id", id);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("menu", JSON.stringify(menu));
 
     this.user = user;
     this.token = token;
+    this.menu = menu;
   }
 
   logout() {
     this.user = null;
     this.token = null;
+    this.menu = null;
+
     localStorage.removeItem("id");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("menu");
 
     this.router.navigate(["/login"]);
   }
@@ -58,7 +66,12 @@ export class UserService {
 
     return this._http.post(url, { token }, { headers }).pipe(
       map((response: any) => {
-        this.saveStorage(response.id, response.token, response.user);
+        this.saveStorage(
+          response.id,
+          response.token,
+          response.user,
+          response.menu
+        );
         return response.user;
       })
     );
@@ -77,8 +90,21 @@ export class UserService {
         } else {
           localStorage.removeItem("email");
         }
-        this.saveStorage(response.id, response.token, response.user);
+        this.saveStorage(
+          response.id,
+          response.token,
+          response.user,
+          response.menu
+        );
         return response.user;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: "Login Error",
+          text: err.error.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -123,6 +149,14 @@ export class UserService {
           type: "success"
         });
         return response.user;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -141,9 +175,22 @@ export class UserService {
         });
         if (user._id === this.user._id) {
           let userResponse: User = response.user;
-          this.saveStorage(userResponse._id, this.token, userResponse);
+          this.saveStorage(
+            userResponse._id,
+            this.token,
+            userResponse,
+            this.menu
+          );
         }
         return response.user;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -158,6 +205,14 @@ export class UserService {
       map((response: any) => {
         Swal.fire("Deleted!", "User has been deleted.", "success");
         return response.user;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -173,8 +228,14 @@ export class UserService {
         });
 
         this.user.img = response.users.img;
-        this.saveStorage(id, this.token, this.user);
+        this.saveStorage(id, this.token, this.user, this.menu);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        Swal.fire({
+          title: err.message,
+          text: err.errors.message,
+          type: "error"
+        });
+      });
   }
 }

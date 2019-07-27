@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { map } from "rxjs/operators";
+import { throwError } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
 import { Hospital } from "../../models/hospital.model";
 import { UploadService } from "../upload/upload.service";
@@ -65,6 +66,14 @@ export class HospitalService {
           type: "success"
         });
         return response.hospital;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -82,6 +91,14 @@ export class HospitalService {
           type: "success"
         });
         return response.hospital;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -96,6 +113,14 @@ export class HospitalService {
       map((response: any) => {
         Swal.fire("Deleted!", "Hospital has been deleted.", "success");
         return response.hospital;
+      }),
+      catchError(err => {
+        Swal.fire({
+          title: err.error.message,
+          text: err.error.errors.message,
+          type: "error"
+        });
+        return throwError(err);
       })
     );
   }
@@ -112,6 +137,12 @@ export class HospitalService {
 
         this.hospital.img = response.hospitals.img;
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        Swal.fire({
+          title: err.message,
+          text: err.errors.message,
+          type: "error"
+        });
+      });
   }
 }

@@ -4,6 +4,7 @@ import {
   UserService,
   ModalUploadService
 } from "src/app/services/service.index";
+import { ActivatedRoute } from "@angular/router";
 import Swal from "sweetalert2";
 
 @Component({
@@ -19,11 +20,19 @@ export class UsersComponent implements OnInit {
 
   constructor(
     public _userService: UserService,
-    public _modalUpdloadServe: ModalUploadService
+    public _modalUpdloadServe: ModalUploadService,
+    public activatedRouter: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.loadUsers();
+    this.activatedRouter.params.subscribe(params => {
+      let id = params["id"];
+      if (id === "all") {
+        this.loadUsers();
+      } else {
+        this.searchUser(id);
+      }
+    });
     this._modalUpdloadServe.notification.subscribe((response: any) => {
       this.users.map((user: User) => {
         if (user._id === response.users._id) {

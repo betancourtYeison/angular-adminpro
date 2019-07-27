@@ -4,6 +4,7 @@ import {
   ModalUploadService
 } from "src/app/services/service.index";
 import { Hospital } from "../../models/hospital.model";
+import { ActivatedRoute } from "@angular/router";
 import Swal from "sweetalert2";
 
 @Component({
@@ -19,11 +20,19 @@ export class HospitalsComponent implements OnInit {
 
   constructor(
     public _hospitalService: HospitalService,
-    public _modalUpdloadServe: ModalUploadService
+    public _modalUpdloadServe: ModalUploadService,
+    public activatedRouter: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.loadHospitals();
+    this.activatedRouter.params.subscribe(params => {
+      let id = params["id"];
+      if (id === "all") {
+        this.loadHospitals();
+      } else {
+        this.searchHospital(id);
+      }
+    });
     this._modalUpdloadServe.notification.subscribe((response: any) => {
       this.hospitals.map((hospital: Hospital) => {
         if (hospital._id === response.hospitals._id) {

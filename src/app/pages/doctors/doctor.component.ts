@@ -40,7 +40,6 @@ export class DoctorComponent implements OnInit {
       .subscribe((response: any) => (this.hospitals = response.hospitals));
 
     this._modalUpdloadServe.notification.subscribe((response: any) => {
-      console.log(this.doctor);
       this.doctor.img = response.doctors.img;
     });
   }
@@ -49,7 +48,6 @@ export class DoctorComponent implements OnInit {
     this._doctorService.loadDoctor(id).subscribe((response: any) => {
       this.doctor = response.doctor;
       this.doctor.hospital = response.doctor.hospital._id;
-      console.log(this.doctor);
       this.changeHospital(this.doctor.hospital);
     });
   }

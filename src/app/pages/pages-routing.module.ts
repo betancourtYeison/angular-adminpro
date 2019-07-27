@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { LoginGuard } from "../services/service.index";
+import { LoginGuard, AdminGuard } from "../services/service.index";
 
 import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
@@ -11,6 +11,7 @@ import { PromisesComponent } from "./promises/promises.component";
 import { RxjsComponent } from "./rxjs/rxjs.component";
 import { AccountSettingsComponent } from "./account-settings/account-settings.component";
 import { ProfileComponent } from "./profile/profile.component";
+import { SearchComponent } from "./search/search.component";
 import { UsersComponent } from "./users/users.component";
 import { HospitalsComponent } from "./hospitals/hospitals.component";
 import { DoctorsComponent } from "./doctors/doctors.component";
@@ -54,14 +55,20 @@ const pagesRoutes: Routes = [
         component: ProfileComponent,
         data: { title: "Profile" }
       },
+      {
+        path: "search/:term",
+        component: SearchComponent,
+        data: { title: "Search" }
+      },
       // Maintenance
       {
-        path: "users",
+        canActivate: [AdminGuard],
+        path: "users/:id",
         component: UsersComponent,
         data: { title: "Maintenance Users" }
       },
       {
-        path: "hospitals",
+        path: "hospitals/:id",
         component: HospitalsComponent,
         data: { title: "Maintenance Hospitals" }
       },
