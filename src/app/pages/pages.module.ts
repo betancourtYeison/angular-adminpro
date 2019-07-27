@@ -11,11 +11,9 @@ import { PipesModule } from "../pipes/pipes.module";
 
 import { IncreaserComponent } from "../components/increaser/increaser.component";
 import { GraphicDoughnutComponent } from "../components/graphic-doughnut/graphic-doughnut.component";
-import { ModalUploadComponent } from "../components/modal-upload/modal-upload.component";
 
 import { LoaderComponent } from "../shared/loader/loader.component";
 
-import { PagesComponent } from "./pages.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ProgressComponent } from "./progress/progress.component";
 import { Graphics1Component } from "./graphics1/graphics1.component";
@@ -25,17 +23,15 @@ import { AccountSettingsComponent } from "./account-settings/account-settings.co
 import { ProfileComponent } from "./profile/profile.component";
 import { UsersComponent } from "./users/users.component";
 import { HospitalsComponent } from "./hospitals/hospitals.component";
-import { DoctorsComponent } from './doctors/doctors.component';
-import { DoctorComponent } from './doctors/doctor.component';
-import { SearchComponent } from './search/search.component';
+import { DoctorsComponent } from "./doctors/doctors.component";
+import { DoctorComponent } from "./doctors/doctor.component";
+import { SearchComponent } from "./search/search.component";
 
 @NgModule({
   declarations: [
     IncreaserComponent,
     GraphicDoughnutComponent,
-    ModalUploadComponent,
     LoaderComponent,
-    PagesComponent,
     DashboardComponent,
     ProgressComponent,
     Graphics1Component,
@@ -49,12 +45,7 @@ import { SearchComponent } from './search/search.component';
     DoctorComponent,
     SearchComponent
   ],
-  exports: [
-    PagesComponent,
-    DashboardComponent,
-    ProgressComponent,
-    Graphics1Component
-  ],
+  exports: [DashboardComponent, ProgressComponent, Graphics1Component],
   imports: [
     CommonModule,
     SharedModule,

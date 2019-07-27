@@ -12,8 +12,9 @@ import Swal from "sweetalert2";
   providedIn: "root"
 })
 export class UserService {
-  user: User;
+  id: string;
   token: string;
+  user: User;
   menu: any = [];
 
   constructor(
@@ -24,14 +25,38 @@ export class UserService {
     this.loadStorage();
   }
 
+  renewToken() {
+    let url = `${URL_SERVICES}/login/renewToken?token=${this.token}`;
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    return this._http.get(url, { headers }).pipe(
+      map((response: any) => {
+        console.log(response);
+        this.saveStorage(this.id, response.token, this.user, this.menu);
+        return response.token;
+      }),
+      catchError(err => {
+        this.router.navigate(["/login"]);
+        Swal.fire({
+          title: "Token Error",
+          text: "Can not renew token",
+          type: "error"
+        });
+        return throwError(err);
+      })
+    );
+  }
+
   isLoggedIn() {
     return this.token && this.token.length > 5;
   }
 
   loadStorage() {
-    this.menu = JSON.parse(localStorage.getItem("menu"));
+    this.id = localStorage.getItem("id");
     this.user = JSON.parse(localStorage.getItem("user"));
     this.token = localStorage.getItem("token");
+    this.menu = JSON.parse(localStorage.getItem("menu"));
   }
 
   saveStorage(id: string, token: string, user: User, menu: any) {
@@ -40,14 +65,16 @@ export class UserService {
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("menu", JSON.stringify(menu));
 
-    this.user = user;
+    this.id = id;
     this.token = token;
+    this.user = user;
     this.menu = menu;
   }
 
   logout() {
-    this.user = null;
+    this.id = null;
     this.token = null;
+    this.user = null;
     this.menu = null;
 
     localStorage.removeItem("id");
