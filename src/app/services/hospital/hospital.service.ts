@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { throwError } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
 import { Hospital } from "../../models/hospital.model";
 import { UploadService } from "../upload/upload.service";
@@ -29,36 +28,22 @@ export class HospitalService {
 
   searchHospital(search: string) {
     let url = `${URL_SERVICES}/search/collection/hospitals/${search}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http
-      .get(url, { headers })
-      .pipe(map((response: any) => response.hospitals));
+    return this._http.get(url).pipe(map((response: any) => response.hospitals));
   }
 
   loadHospital(id: string) {
     let url = `${URL_SERVICES}/hospital/${id}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers });
+    return this._http.get(url);
   }
 
   loadHospitals(from: number = 0) {
     let url = `${URL_SERVICES}/hospital?from=${from}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers });
+    return this._http.get(url);
   }
 
   createHospital(hospital: Hospital) {
     let url = `${URL_SERVICES}/hospital?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.post(url, hospital, { headers }).pipe(
+    return this._http.post(url, hospital).pipe(
       map((response: any) => {
         Swal.fire({
           title: "Hospital created",
@@ -66,24 +51,13 @@ export class HospitalService {
           type: "success"
         });
         return response.hospital;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }
 
   updateHospital(hospital: Hospital) {
     let url = `${URL_SERVICES}/hospital/${hospital._id}?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.put(url, hospital, { headers }).pipe(
+    return this._http.put(url, hospital).pipe(
       map((response: any) => {
         Swal.fire({
           title: "Hospital updated",
@@ -91,36 +65,16 @@ export class HospitalService {
           type: "success"
         });
         return response.hospital;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }
 
   deleteHospital(id: string) {
     let url = `${URL_SERVICES}/hospital/${id}?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.delete(url, { headers }).pipe(
+    return this._http.delete(url).pipe(
       map((response: any) => {
         Swal.fire("Deleted!", "Hospital has been deleted.", "success");
         return response.hospital;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }

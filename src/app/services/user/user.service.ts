@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 import { URL_SERVICES } from "../../config/config";
@@ -27,12 +27,8 @@ export class UserService {
 
   renewToken() {
     let url = `${URL_SERVICES}/login/renewToken?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers }).pipe(
+    return this._http.get(url).pipe(
       map((response: any) => {
-        console.log(response);
         this.saveStorage(this.id, response.token, this.user, this.menu);
         return response.token;
       }),
@@ -87,11 +83,7 @@ export class UserService {
 
   loginWithGoogle(token: string) {
     let url = `${URL_SERVICES}/login/google`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.post(url, { token }, { headers }).pipe(
+    return this._http.post(url, { token }).pipe(
       map((response: any) => {
         this.saveStorage(
           response.id,
@@ -106,11 +98,7 @@ export class UserService {
 
   login(user: User, rememberme: boolean = false) {
     let url = `${URL_SERVICES}/login`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.post(url, user, { headers }).pipe(
+    return this._http.post(url, user).pipe(
       map((response: any) => {
         if (rememberme) {
           localStorage.setItem("email", user.email);
@@ -124,51 +112,28 @@ export class UserService {
           response.menu
         );
         return response.user;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: "Login Error",
-          text: err.error.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }
 
   searchUser(search: string) {
     let url = `${URL_SERVICES}/search/collection/users/${search}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http
-      .get(url, { headers })
-      .pipe(map((response: any) => response.users));
+    return this._http.get(url).pipe(map((response: any) => response.users));
   }
 
   loadUser(id: string) {
     let url = `${URL_SERVICES}/user/${id}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers });
+    return this._http.get(url);
   }
 
   loadUsers(from: number = 0) {
     let url = `${URL_SERVICES}/user?from=${from}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.get(url, { headers });
+    return this._http.get(url);
   }
 
   createUser(user: User) {
     let url = `${URL_SERVICES}/user`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.post(url, user, { headers }).pipe(
+    return this._http.post(url, user).pipe(
       map((response: any) => {
         Swal.fire({
           title: "User created",
@@ -176,24 +141,13 @@ export class UserService {
           type: "success"
         });
         return response.user;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }
 
   updateUser(user: User) {
     let url = `${URL_SERVICES}/user/${user._id}?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-    return this._http.put(url, user, { headers }).pipe(
+    return this._http.put(url, user).pipe(
       map((response: any) => {
         Swal.fire({
           title: "User updated",
@@ -210,36 +164,16 @@ export class UserService {
           );
         }
         return response.user;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }
 
   deleteUser(id: string) {
     let url = `${URL_SERVICES}/user/${id}?token=${this.token}`;
-    let headers = new HttpHeaders({
-      "Content-Type": "application/json"
-    });
-
-    return this._http.delete(url, { headers }).pipe(
+    return this._http.delete(url).pipe(
       map((response: any) => {
         Swal.fire("Deleted!", "User has been deleted.", "success");
         return response.user;
-      }),
-      catchError(err => {
-        Swal.fire({
-          title: err.error.message,
-          text: err.error.errors.message,
-          type: "error"
-        });
-        return throwError(err);
       })
     );
   }

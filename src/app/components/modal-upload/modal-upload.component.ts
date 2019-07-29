@@ -60,7 +60,14 @@ export class ModalUploadComponent implements OnInit {
         this._modalUploadService.notification.emit(response);
         this.hideModal();
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        Swal.fire({
+          title: err.message,
+          text: err.errors.message,
+          type: "error"
+        });
+        this.hideModal();
+      });
   }
 
   hideModal() {

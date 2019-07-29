@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+
+import { InterceptorService } from "../interceptors/interceptor.service";
 
 import {
   SettingsService,
@@ -20,6 +22,11 @@ import {
   declarations: [],
   imports: [CommonModule, HttpClientModule],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    },
     SettingsService,
     SharedService,
     SidebarService,
